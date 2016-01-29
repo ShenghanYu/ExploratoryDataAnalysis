@@ -1,8 +1,16 @@
-##set local work directory 
+# Set local work directory 
 setwd("./ExploratoryDataAnalysis")
 
-##installing all the required packages to read xlsx files
+# Installing all the required packages to read xlsx files
 library(readxl)
 
-##reading the file from your local directory
+# Read  file from the local directory
+# to change: read it from GitHub instead of local 
 df = read_excel("Survey.xlsx")
+
+# Delete empty columns 
+df <- Filter(function(x)!all(is.na(x)), df)
+
+" Split tools in column 3
+sapply(df, strsplit(df$'Experiences with tools', ","))
+ "      
