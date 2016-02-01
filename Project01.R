@@ -1,11 +1,13 @@
 # Installing all the required packages
-needed.libraries <- c("RCurl", "data.table", "ggplot2")
+needed.libraries <- c("RCurl", "data.table", "ggplot2", "grid", "dplyr")
 install.packages(needed.libraries, dependencies = TRUE)
 
 # Run packages
-library(RCurl)   #to read CSV
-library(data.table)  #Data table manipulation
+library(RCurl)
+library(data.table) 
 library(ggplot2)
+library(grid)
+library(dplyr)
 
 # Read  file from GitHub repo
 CSV_url <- getURL("https://raw.githubusercontent.com/Amirosimani/ExploratoryDataAnalysis/master/Survey.csv")
@@ -32,7 +34,7 @@ DataFrame[,col_names] <- lapply(DataFrame[,col_names] , factor)"
 degreeFactors <- DataFrame[,.N,by= degree]
 degreeFactors$N[1] <- degreeFactors$N[1] + degreeFactors$N[6] + degreeFactors$N[8] + degreeFactors$N[12]
 degreeFactors <- degreeFactors[-c(6, 8, 12), ]
-degreeFactors <- degreeFactors[order(-N),] 
+degreeFactors <- data.frame(degreeFactors)
 
 
 # Multiple plot function
@@ -72,18 +74,18 @@ multiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL) {
   }
 }
 
-#to do: data label on bars + different color for yes and no questions
+#to do: data label on bars
 
 #waitlist graph
-waitlistGraph <- ggplot(DataFrame, aes(factor(DataFrame$waitlist))) + geom_bar(width=.5) +
-                   labs(title = "Enrollement Status", x = "Waitlist", y = "Number of students")
+waitlistGraph <- ggplot(DataFrame, aes(factor(DataFrame$waitlist), fill = factor(DataFrame$waitlist))) + geom_bar(width=.5) +
+                 labs(title = "Enrollement Status", x = "Waitlist", y = "Number of students")
 
-#degrees graph
-degreeGraph <- ggplot(degreeFactors, aes(x = factor(degree), y = N)) + geom_bar(stat = "identity") + 
-               labs(title = "Programs", x = "Name of program", y = "Number of students") +
+#degrees graph             
+degreeGraph <- ggplot(degreeFactors, aes(x = reorder(degree, -N), y = N)) + 
+               geom_bar(stat = "identity") + 
+      labs(title = "Programs", x = "Name of program", y = "Number of students")
               
-
-multiplot(waitlistGraph,degreeGraph, cols=2)
+multiplot(waitlistGraph, degreeGraph, cols=2)
 
 
 #R Data manipulation graph
@@ -108,3 +110,21 @@ GitHubGraph <- ggplot(DataFrame, aes(factor(DataFrame$GitHub))) + geom_bar(width
 
 multiplot(dataManiGraph,RGraphicsGraph, RAdvancedGraph, RMDGraph, MatlabGraph, GitHubGraph, cols=3)
 
+#to do: cleaner code using a for loop
+
+c1 <- count(DataFrame, vars = R_DataManipulation )
+colnames(c1) <- c("Level","R_DataManipulation")
+c2 <- count(DataFrame, vars = R_Graphics )
+colnames(c2) <- c(2,"R_Graphics")
+c3 <- count(DataFrame, vars = R_MultiVariate )
+colnames(c3) <- c(3,"R_MultiVariate")
+c4 <- count(DataFrame, vars = Markdown )
+colnames(c4) <- c(4,"Markdown")
+c5 <- count(DataFrame, vars = Matlab_DataManipulation )
+colnames(c5) <- c(5,"Matlab_DataManipulation")
+c6 <- count(DataFrame, vars = GitHub )
+colnames(c6) <- c(6,"GitHub")
+
+expertise <- cbind(c1, c2, c3, c4, c5, c6)
+expertise[,c('2', '3', '4', '5', '6') := NULL] 
+  
