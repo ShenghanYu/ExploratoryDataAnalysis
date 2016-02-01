@@ -1,10 +1,13 @@
 # Set local work directory 
-setwd("./ExploratoryDataAnalysis")
+setwd("./GitHub/ExploratoryDataAnalysis")
 
 # Installing all the required packages
+needed.libraries <- c("RCurl", "data.table")
+install.packages(needed.libraries, dependencies = TRUE)
+
+# Run packages
 library(RCurl)   #to read CSV
 library(data.table)  #Data table manipulation
-
 
 # Read  file from GitHub repo
 CSV_url <- getURL("https://raw.githubusercontent.com/Amirosimani/ExploratoryDataAnalysis/master/Survey.csv")
