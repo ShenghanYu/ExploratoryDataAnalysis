@@ -22,20 +22,15 @@ colnames(DataFrame) <- c("waitlist","degree","tools",
 DataFrame$tools = gsub("\\(formerly docs\\)", "", DataFrame$tools)
 DataFrame$tools =  gsub("\\(grep\\)", "", gsub("\\(terminal \\/ command line\\)","", DataFrame$tools))
                     
-#splitting programs into a list
+#Degree: removing non-unique values, combingin similar ones, etc
+DataFrame$degree = gsub("\\(master\\)", "", DataFrame$degree)
+DataFrame$degree[which(DataFrame$degree== "MSDS")]<-"IDSE"
+DataFrame$degree[which(DataFrame$degree== "Ms in ds")]<-"IDSE"
+DataFrame$degree[which(DataFrame$degree== "Data Science")]<-"IDSE"
+
+#Tools: spliting tools to seperate columns
 tools <- strsplit(as.character(DataFrame$tools),',') 
 setDT(DataFrame)[, paste0("tools", 1:16) := tstrsplit(tools, ",")]   #Add seperate column for each program
-
-# Converting columns to factor
-"col_names <- names(DataFrame)
-DataFrame[,col_names] <- lapply(DataFrame[,col_names] , factor)"
-
-#removing non-unique degree values
-degreeFactors <- DataFrame[,.N,by= degree]
-degreeFactors$N[1] <- degreeFactors$N[1] + degreeFactors$N[6] + degreeFactors$N[8] + degreeFactors$N[12]
-degreeFactors <- degreeFactors[-c(6, 8, 12), ]
-degreeFactors <- data.frame(degreeFactors)
-
 
 # Multiple plot function
 multiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL) {
@@ -81,7 +76,10 @@ waitlistGraph <- ggplot(DataFrame, aes(factor(DataFrame$waitlist), fill = factor
                  labs(title = "Enrollement Status", x = "Waitlist", y = "Number of students")
 
 #degrees graph             
-degreeGraph <- ggplot(degreeFactors, aes(x = reorder(degree, -N), y = N)) + 
+deg = count(DataFrame, vars= degree)
+deg[order(n, vars,decreasing=T),]
+
+degreeGraph <- ggplot(deg, aes(x = reorder(vars, -n), y = n)) + 
                geom_bar(stat = "identity") + 
       labs(title = "Programs", x = "Name of program", y = "Number of students")
               
@@ -100,7 +98,6 @@ RAdvancedGraph <- ggplot(DataFrame, aes(factor(DataFrame$R_MultiVariate))) + geo
 #R Markdown
 RMDGraph <- ggplot(DataFrame, aes(factor(DataFrame$Markdown))) + geom_bar(width=.5) + 
                         labs(title ="R Markdown", x = "Confidence Level", y = "Number of students")
-
 #Matlab Data Manipulation
 MatlabGraph <- ggplot(DataFrame, aes(factor(DataFrame$Matlab_DataManipulation))) + geom_bar(width=.5) + 
                       labs(title = "Data Manipulation wiht Matlab", x = "Confidence Level", y = "Number of students")
@@ -110,21 +107,6 @@ GitHubGraph <- ggplot(DataFrame, aes(factor(DataFrame$GitHub))) + geom_bar(width
 
 multiplot(dataManiGraph,RGraphicsGraph, RAdvancedGraph, RMDGraph, MatlabGraph, GitHubGraph, cols=3)
 
-#to do: cleaner code using a for loop
-
-c1 <- count(DataFrame, vars = R_DataManipulation )
-colnames(c1) <- c("Level","R_DataManipulation")
-c2 <- count(DataFrame, vars = R_Graphics )
-colnames(c2) <- c(2,"R_Graphics")
-c3 <- count(DataFrame, vars = R_MultiVariate )
-colnames(c3) <- c(3,"R_MultiVariate")
-c4 <- count(DataFrame, vars = Markdown )
-colnames(c4) <- c(4,"Markdown")
-c5 <- count(DataFrame, vars = Matlab_DataManipulation )
-colnames(c5) <- c(5,"Matlab_DataManipulation")
-c6 <- count(DataFrame, vars = GitHub )
-colnames(c6) <- c(6,"GitHub")
-
-expertise <- cbind(c1, c2, c3, c4, c5, c6)
-expertise[,c('2', '3', '4', '5', '6') := NULL] 
-  
+#buidling experitse table
+expertise = as.data.table(count(DataFrame, vars= R_DataManipulation))
+setnames(expertise, "n", "R_DataManipulation")
