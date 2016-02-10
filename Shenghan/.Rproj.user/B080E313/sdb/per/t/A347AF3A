@@ -1,0 +1,22 @@
+{
+    "contents" : "",
+    "created" : 1455119073174.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "A347AF3A",
+    "lastKnownWriteTime" : 7008860452498465138,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "caption" : "subgroup_nonIDSE",
+        "contentUrl" : "content?title=subgroup_nonIDSE&file=cb3d39da409e4e658528ff2bde5feade.htm",
+        "displayedObservations" : 75,
+        "displayedVariables" : 31,
+        "totalObservations" : 75,
+        "variables" : 30
+    },
+    "source_on_save" : false,
+    "type" : "r_dataframe"
+}
