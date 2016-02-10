@@ -1,0 +1,22 @@
+{
+    "contents" : "",
+    "created" : 1455119040457.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "2ADE909E",
+    "lastKnownWriteTime" : 7741240722073845761,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "caption" : "subgroup_IDSE",
+        "contentUrl" : "content?title=subgroup_IDSE&file=1ce060484ff2407798634c9d1f62cb80.htm",
+        "displayedObservations" : "39",
+        "displayedVariables" : 31,
+        "totalObservations" : "39",
+        "variables" : "30"
+    },
+    "source_on_save" : false,
+    "type" : "r_dataframe"
+}

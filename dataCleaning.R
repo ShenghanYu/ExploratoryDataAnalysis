@@ -23,15 +23,17 @@ dataset <- raw_data
 dataset$gender[raw_data$What.is.your.preferred.gender.pronoun.=="he/him"] = "Male"
 dataset$gender[raw_data$What.is.your.preferred.gender.pronoun.=="she/her"] = "Female"
 dataset$gender[raw_data$What.is.your.preferred.gender.pronoun.=="doesn't matter"] = "Declined to state"
-dataset$gender[raw_data$What.is.your.preferred.gender.pronoun.=="NA"] = "Declined to state"
+dataset$gender[is.na(raw_data$What.is.your.preferred.gender.pronoun.)] = "Declined to state"
 dataset$gender <- factor(dataset$gender)
 
 ## 2.Program
 dataset$program <- raw_data$Program
 dataset$program[raw_data$Program == 'Ms in ds'] = 'IDSE (master)'
 dataset$program[raw_data$Program == 'MSDS'] = 'IDSE (master)'
-dataset$program[raw_data$Program == 'applied Math'] = 'Other masters'
+dataset$program[raw_data$Program == 'Data Science'] = 'IDSE (master)'
+dataset$program[raw_data$Program == 'Applied Math'] = 'Other masters'
 dataset$program[raw_data$Program == 'PhD Biomedical Informatics'] = 'Ph.D.'
+dataset$program[raw_data$Program == 'QMSS'] = 'QMSS (master)'
 dataset$program <- factor(dataset$program)
 
 ## 3.Waitlist
@@ -82,8 +84,8 @@ dataset <- dataset[,-(1:38)]
 
 subgroup_R <- dataset[dataset$R==1,] 
 
-subgroup_IDSE <- dataset[dataset$program=='IDSE (master)',] 
-subgroup_nonIDSE <- dataset[dataset$program!='IDSE (master)',] 
+subgroup_IDSE <- dataset[dataset$program==c('IDSE (master)', 'Data Science Certification'),] 
+subgroup_nonIDSE <- dataset[dataset$program!=c('IDSE (master)', 'Data Science Certification'),] 
 
 subgroup_male <- dataset[dataset$gender=='Male',] 
 subgroup_female <- dataset[dataset$gender=='Female',] 

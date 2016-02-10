@@ -1,0 +1,22 @@
+{
+    "contents" : "",
+    "created" : 1455119119454.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "9CE41368",
+    "lastKnownWriteTime" : 32651513914720368,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "caption" : "subgroup_R",
+        "contentUrl" : "content?title=subgroup_R&file=e23392a7e3f34730a10dbce601d80799.htm",
+        "displayedObservations" : 90,
+        "displayedVariables" : 31,
+        "totalObservations" : 90,
+        "variables" : 30
+    },
+    "source_on_save" : false,
+    "type" : "r_dataframe"
+}
